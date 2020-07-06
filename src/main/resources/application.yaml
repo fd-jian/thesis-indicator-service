@@ -5,3 +5,7 @@
 ## TODO: necessary to allow definition overriding? (duplicate beans defined, e.g. for use of qualifiers.)
 #  main:
 #    allow-bean-definition-overriding: true
+server:
+  port: 8080
+  servlet:
+    context-path: /api/visual/
