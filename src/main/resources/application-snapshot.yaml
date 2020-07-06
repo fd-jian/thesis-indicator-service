@@ -1,0 +1,47 @@
+debug: true
+
+custom:
+  kafka:
+    topics:
+      activities: activities
+      sensor-data: accelerometer
+
+# Native Encoding enables the kafka serialization/deserialization
+spring.cloud.stream.default.producer:
+  useNativeEncoding: true
+
+spring.cloud.stream.default.consumer:
+  useNativeEncoding: true
+
+#TODO: figure out how to handle different types. maybe use connector to stream in format <key: timestamp, value: json>
+#TODO:    so that the bindings can be configured for a single serializer/deserializer for all streams.
+
+# Configure the kafka streams binder to consume messages
+spring.cloud.stream.kafka.streams.binder:
+  brokers: kafka:29092
+  configuration:
+# TODO: use native encoding (is it used already?)
+#    default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+    default.key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+#    default.key.serde: org.springframework.kafka.support.serializer.JsonSerde
+    default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+    schema.registry.url: http://schema-registry:8081
+#    default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
+#    default.value.serde: com.edutec.activitydetector.AccelerometerSerde
+#    default.value.serde: org.springframework.kafka.support.serializer.JsonSerde
+    cache.max.bytes.buffering: 0
+
+spring.cloud.stream.bindings.input.contentType: application/*+avro
+spring.cloud.stream.bindings.input.consumer.useNativeDecoding: true
+spring.cloud.stream.bindings.output.producer.useNativeEncoding: true
+
+# Configure the bindings
+spring.cloud.stream.bindings:
+  sensor-data:
+    destination: ${custom.kafka.topics.sensor-data}
+  activities:
+    destination: ${custom.kafka.topics.activities}
+
+spring.cloud.stream.kafka.streams.bindings:
+  sensor-data:
+    consumer.application-id: kafka-websocket-client

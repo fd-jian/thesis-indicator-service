@@ -1,0 +1,21 @@
+{
+  "type" : "record",
+  "name" : "CountSumTimeAverage",
+  "namespace" : "com.edutec.activitydetector.countsum",
+  "fields" : [ {
+    "name" : "count",
+    "type" : "long"
+  }, {
+    "name" : "timeSumSec",
+    "type" : {
+      "type" : "string",
+      "avro.java.string" : "String"
+    }
+  }, {
+    "name" : "countPerSecond",
+    "type" : {
+      "type" : "string",
+      "avro.java.string" : "String"
+    }
+  } ]
+}

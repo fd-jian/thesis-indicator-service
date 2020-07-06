@@ -1,0 +1,144 @@
+buildscript {
+    ext {
+        avroVersion = '0.20.0'
+        avroRegistryVersion = '0.9.0'
+    }
+
+    dependencies {
+        classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:${avroVersion}"
+        classpath "com.github.imflog:kafka-schema-registry-gradle-plugin:${avroRegistryVersion}"
+    }
+}
+
+plugins {
+    id "com.commercehub.gradle.plugin.avro" version "${avroVersion}"
+    id "com.github.imflog.kafka-schema-registry-gradle-plugin" version "0.9.0"
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id 'idea'
+}
+
+group = 'com.edutec'
+sourceCompatibility = 14
+targetCompatibility = 14
+
+ext {
+    springCloudVersion = 'Hoxton.SR4'
+    mapstructVersion = '1.2.0.Final'    // MUST be 1.2.0.Final! Disabling builders did not work for me with 1.3.0.Final
+                                        // src/resources/META-INF/services was ignored. Gradle/Spring boot issue?
+                                        // Tried to follow the hint in the last paragraph of the reference documentation:
+                                        // https://mapstruct.org/documentation/stable/reference/html/#mapping-with-builders
+    lombokVersion = '1.18.10'
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url  "https://packages.confluent.io/maven/"
+    }
+}
+
+configurations {
+    //compile.exclude module: 'spring-boot-starter-logging' // to inhibit the being stuck with h2 tests as in vertrag
+    compile.exclude module: 'junit' // to be able to use junit 5 = jupiter
+
+    developmentOnly
+    runtimeClasspath {
+        extendsFrom developmentOnly
+    }
+
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+
+compileTestJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+compileJava {
+    options.encoding = 'UTF-8'
+    options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+}
+
+springBoot  {
+    buildInfo()
+}
+
+// Enable configuration of active profiles via gradle CLI argument (e.g. `gradle bootRun -Dspring.profiles.active=local,dev`)
+bootRun {
+    systemProperty 'spring.profiles.active', System.getProperty('spring.profiles.active')
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    // kafka
+    implementation 'org.springframework.cloud:spring-cloud-stream'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka'
+    implementation 'org.springframework.cloud:spring-cloud-stream-binder-kafka-streams'
+    implementation 'io.confluent:kafka-streams-avro-serde:5.5.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+    // websocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+    //  Mapstruct
+    implementation "org.mapstruct:mapstruct-jdk8:${mapstructVersion}"
+    annotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    testAnnotationProcessor "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+
+    // Lombok
+    implementation "org.projectlombok:lombok:${lombokVersion}"
+    annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+    testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+
+    // jackson
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml' // log4j
+
+    // testing libs
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation 'org.springframework.cloud:spring-cloud-stream-test-support'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    testImplementation 'org.apache.kafka:kafka-streams-test-utils'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.4.2'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+schemaRegistry {
+    url = 'http://localhost:8081/'
+    credentials {
+//        username = 'basicauthentication-username'
+//        password = 'basicauthentication-password'
+    } //optional
+
+    register {
+//        subject('activities-key', 'src/main/avro')
+        subject('activities-value', 'src/main/avro/values')
+        subject('accelerometer-value', 'src/main/avro/values')
+        //subject('accelerometer-key', 'src/main/avro')
+    }
+
+    download {
+//        subject('activities-key', 'src/main/avro')
+        subject('activities-value', 'src/main/avro/values')
+        subject('accelerometer-value', 'src/main/avro/values')
+        //subject('accelerometer-key', 'src/main/avro')
+    }
+}
