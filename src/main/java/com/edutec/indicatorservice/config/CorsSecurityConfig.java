@@ -1,4 +1,4 @@
-package com.edutec.activitydetector.config;
+package com.edutec.indicatorservice.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;

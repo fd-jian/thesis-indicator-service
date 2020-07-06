@@ -1,4 +1,4 @@
-package com.edutec.activitydetector.bindings;
+package com.edutec.indicatorservice.bindings;
 
 import com.edutec.activitydetector.countsum.CountSumTimeAverage;
 import com.edutec.activitydetector.model.AccelerometerRecord;

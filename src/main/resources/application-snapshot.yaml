@@ -44,4 +44,4 @@ spring.cloud.stream.bindings:
 
 spring.cloud.stream.kafka.streams.bindings:
   sensor-data:
-    consumer.application-id: kafka-websocket-client
+    consumer.application-id: indicator-service

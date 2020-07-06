@@ -12,4 +12,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'kafka-websocket-client'
+rootProject.name = 'indicator-service'

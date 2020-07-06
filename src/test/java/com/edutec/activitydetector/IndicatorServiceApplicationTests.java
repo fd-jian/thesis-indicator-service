@@ -1,11 +1,11 @@
-package com.edutec.activitydetector;
+package com.edutec.indicatorservice;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ActivityDetectorApplicationTests {
+class IndicatorServiceApplicationTests {
 
     @Test
     @Disabled

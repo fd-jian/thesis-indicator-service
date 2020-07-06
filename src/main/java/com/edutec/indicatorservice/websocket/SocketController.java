@@ -1,6 +1,6 @@
-package com.edutec.activitydetector.websocket;
+package com.edutec.indicatorservice.websocket;
 
-import com.edutec.activitydetector.model.CountSumTimeAverageDto;
+import com.edutec.indicatorservice.model.CountSumTimeAverageDto;
 
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;

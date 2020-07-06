@@ -1,4 +1,4 @@
-package com.edutec.activitydetector.handlers;
+package com.edutec.indicatorservice.handlers;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -6,11 +6,11 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
-import com.edutec.activitydetector.bindings.Bindings;
+import com.edutec.indicatorservice.bindings.Bindings;
 import com.edutec.activitydetector.countsum.CountSumTimeAverage;
 import com.edutec.activitydetector.model.AccelerometerRecord;
-import com.edutec.activitydetector.model.AccelerometerRecordDto;
-import com.edutec.activitydetector.model.CountSumTimeAverageDto;
+import com.edutec.indicatorservice.model.AccelerometerRecordDto;
+import com.edutec.indicatorservice.model.CountSumTimeAverageDto;
 
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.logging.log4j.LogManager;

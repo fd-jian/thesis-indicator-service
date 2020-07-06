@@ -1,4 +1,4 @@
-package com.edutec.activitydetector.model;
+package com.edutec.indicatorservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,12 +11,11 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class AccelerometerRecordDto {
+public class CountSumTimeAverageDto {
 
-  private String time;
-  private Float x;
-  private Float y;
-  private Float z;
+  private Long count;
+  private String timeSumSec;
+  private String countPerSecond;
 
 }
 
