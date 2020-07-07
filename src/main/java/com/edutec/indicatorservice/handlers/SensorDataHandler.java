@@ -40,7 +40,7 @@ public class SensorDataHandler {
             log.info("Retrieved message from input binding '" + Bindings.SENSOR_DATA +
                     "', forwarding to output binding '" + Bindings.ACTIVITIES + "'.");
            AccelerometerRecordDto dto = AccelerometerRecordDto.builder()
-                    .time(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT)
+                    .time(DateTimeFormatter.ofPattern("hh:mm:ss:SSS")
                     .format(ZonedDateTime.ofInstant(
                             Instant.ofEpochMilli(value.getTime()), ZoneId.systemDefault())
                         ))
@@ -67,6 +67,7 @@ public class SensorDataHandler {
                 .count(value.getCount())
                 .timeSumSec(value.getTimeSumSec())
                 .countPerSecond(value.getCountPerSecond())
+                .time(value.getTime())
                 .build();
         
             messagingTemplate.convertAndSend("/topic/stats", dto);

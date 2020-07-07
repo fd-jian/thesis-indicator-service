@@ -14,6 +14,7 @@ import lombok.Setter;
 public class CountSumTimeAverageDto {
 
   private Long count;
+  private String time;
   private String timeSumSec;
   private String countPerSecond;
 

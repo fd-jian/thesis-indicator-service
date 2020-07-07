@@ -6,6 +6,12 @@
     "name" : "count",
     "type" : "long"
   }, {
+    "name" : "time",
+    "type" : {
+      "type" : "string",
+      "avro.java.string" : "String"
+    }
+  }, {
     "name" : "timeSumSec",
     "type" : {
       "type" : "string",
