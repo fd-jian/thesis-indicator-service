@@ -5,6 +5,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.util.List;
 
 import com.edutec.indicatorservice.bindings.Bindings;
 import com.edutec.activitydetector.countsum.CountSumTimeAverage;
@@ -39,14 +40,15 @@ public class SensorDataHandler {
         sensorDataStream.foreach((s, value) -> {
             log.info("Retrieved message from input binding '" + Bindings.SENSOR_DATA +
                     "', forwarding to output binding '" + Bindings.ACTIVITIES + "'.");
-           AccelerometerRecordDto dto = AccelerometerRecordDto.builder()
+            Float[] values = value.getValues().toArray(new Float[0]);
+            AccelerometerRecordDto dto = AccelerometerRecordDto.builder()
                     .time(DateTimeFormatter.ofPattern("hh:mm:ss:SSS")
                     .format(ZonedDateTime.ofInstant(
                             Instant.ofEpochMilli(value.getTime()), ZoneId.systemDefault())
                         ))
-                .x(value.getX())
-                .y(value.getY())
-                .z(value.getZ())
+                .x(values[0])
+                .y(values[1])
+                .z(values[2])
                 .build();
 
             messagingTemplate.convertAndSend("/topic/accelerometer", dto);
