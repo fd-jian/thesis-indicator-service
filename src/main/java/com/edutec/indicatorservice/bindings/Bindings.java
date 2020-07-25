@@ -8,12 +8,30 @@ import org.springframework.cloud.stream.annotation.Input;
 
 public interface Bindings {
 
-    String SENSOR_DATA = "sensor-data";
+    String LINEAR_ACCELERATION = "linear-acceleration";
+    String ACCELEROMETER = "accelerometer";
+    String GYROSCOPE = "gyroscope";
+    String LIGHT = "light";
     String ACTIVITIES = "activities";
 
-    @Input(SENSOR_DATA)
+    @Input(LINEAR_ACCELERATION)
     // TODO: use user id key
-    KStream<String, AccelerometerRecord> sensorData();
+    KStream<String, AccelerometerRecord> linearAccelerometer();
+
+
+    @Input(ACCELEROMETER)
+        // TODO: use user id key
+    KStream<String, AccelerometerRecord> accelerometer();
+
+
+    @Input(GYROSCOPE)
+        // TODO: use user id key
+    KStream<String, AccelerometerRecord> gyroscope();
+
+
+    @Input(LIGHT)
+        // TODO: use user id key
+    KStream<String, AccelerometerRecord> light();
 
     @Input(ACTIVITIES)
         // TODO: use user id key

@@ -4,7 +4,10 @@ custom:
   kafka:
     topics:
       activities: activities
-      sensor-data: linear_acceleration
+      linear-acceleration: linear_acceleration
+      accelerometer: accelerometer
+      gyroscope: gyroscope
+      light: light
 
 # Native Encoding enables the kafka serialization/deserialization
 spring.cloud.stream.default.producer:
@@ -37,8 +40,14 @@ spring.cloud.stream.bindings.output.producer.useNativeEncoding: true
 
 # Configure the bindings
 spring.cloud.stream.bindings:
-  sensor-data:
-    destination: ${custom.kafka.topics.sensor-data}
+  linear-acceleration:
+    destination: ${custom.kafka.topics.linear-acceleration}
+  accelerometer:
+    destination: ${custom.kafka.topics.accelerometer}
+  gyroscope:
+    destination: ${custom.kafka.topics.gyroscope}
+  light:
+    destination: ${custom.kafka.topics.light}
   activities:
     destination: ${custom.kafka.topics.activities}
 
