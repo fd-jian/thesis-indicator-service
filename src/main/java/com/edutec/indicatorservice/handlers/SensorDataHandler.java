@@ -91,14 +91,11 @@ public class SensorDataHandler {
             else return 0F;
         }).toArray(Float[]::new);
         AccelerometerRecordDto dto = AccelerometerRecordDto.builder()
-                .time(DateTimeFormatter.ofPattern("hh:mm:ss:SSS")
-                .format(ZonedDateTime.ofInstant(
-                        Instant.ofEpochMilli(value.getTime()), ZoneId.systemDefault())
-                    ))
-            .x(valuesFull[0])
-            .y(valuesFull[1])
-            .z(valuesFull[2])
-            .build();
+                .time(value.getTime())
+                .x(valuesFull[0])
+                .y(valuesFull[1])
+                .z(valuesFull[2])
+                .build();
 
         messagingTemplate.convertAndSend(destination, dto);
     }
