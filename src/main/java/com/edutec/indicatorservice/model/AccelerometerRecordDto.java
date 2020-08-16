@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 public class AccelerometerRecordDto {
 
-  private String time;
+  private long time;
   private Float x;
   private Float y;
   private Float z;
