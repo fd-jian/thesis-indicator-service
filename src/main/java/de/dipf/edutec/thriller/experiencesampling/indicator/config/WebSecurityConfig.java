@@ -1,4 +1,4 @@
-package com.edutec.indicatorservice.config;
+package de.dipf.edutec.thriller.experiencesampling.indicator.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,4 @@
-package com.edutec.indicatorservice.websocket;
+package de.dipf.edutec.thriller.experiencesampling.indicator.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

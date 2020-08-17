@@ -1,7 +1,7 @@
 {
   "type" : "record",
-  "name" : "CountSumTimeAverage",
-  "namespace" : "com.edutec.activitydetector.countsum",
+  "name" : "Stats",
+  "namespace" : "de.dipf.edutec.thriller.experiencesampling",
   "fields" : [ {
     "name" : "count",
     "type" : "long"
@@ -19,6 +19,12 @@
     }
   }, {
     "name" : "countPerSecond",
+    "type" : {
+      "type" : "string",
+      "avro.java.string" : "String"
+    }
+  }, {
+    "name" : "sessionId",
     "type" : {
       "type" : "string",
       "avro.java.string" : "String"

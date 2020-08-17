@@ -1,10 +1,10 @@
-package com.edutec.indicatorservice.handlers;
+package de.dipf.edutec.thriller.experiencesampling.indicator.handlers;
 
-import com.edutec.activitydetector.countsum.CountSumTimeAverage;
-import com.edutec.activitydetector.model.AccelerometerRecord;
-import com.edutec.indicatorservice.bindings.Bindings;
-import com.edutec.indicatorservice.model.AccelerometerRecordDto;
-import com.edutec.indicatorservice.model.CountSumTimeAverageDto;
+import de.dipf.edutec.thriller.experiencesampling.indicator.bindings.Bindings;
+import de.dipf.edutec.thriller.experiencesampling.indicator.model.AccelerometerRecordDto;
+import de.dipf.edutec.thriller.experiencesampling.indicator.model.CountSumTimeAverageDto;
+import de.dipf.edutec.thriller.experiencesampling.SensorRecord;
+import de.dipf.edutec.thriller.experiencesampling.Stats;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.logging.log4j.LogManager;
@@ -26,21 +26,21 @@ public class SensorDataHandler {
     private final SimpMessagingTemplate messagingTemplate;
 
     @StreamListener(Bindings.LINEAR_ACCELERATION)
-    public void processLinearAcceleration(KStream<String, AccelerometerRecord> sensorDataStream) {
+    public void processLinearAcceleration(KStream<String, SensorRecord> sensorDataStream) {
 
         // TODO: implement activity recognition logic
 
         String destination = "/topic/linear-acceleration";
         sensorDataStream.foreach((s, value) -> {
             log.debug("Retrieved message from input binding '" + Bindings.LINEAR_ACCELERATION +
-                    "', forwarding to output binding '" + Bindings.ACTIVITIES + "'.");
+                    "', forwarding to output binding '" + Bindings.STATS + "'.");
             convertAndSend(value, destination);
         });
 
     }
 
     @StreamListener(Bindings.ACCELEROMETER)
-    public void processAccelerometer(KStream<String, AccelerometerRecord> sensorDataStream) {
+    public void processAccelerometer(KStream<String, SensorRecord> sensorDataStream) {
 
         // TODO: implement activity recognition logic
 
@@ -54,7 +54,7 @@ public class SensorDataHandler {
     }
 
     @StreamListener(Bindings.GYROSCOPE)
-    public void processGyroscope(KStream<String, AccelerometerRecord> sensorDataStream) {
+    public void processGyroscope(KStream<String, SensorRecord> sensorDataStream) {
 
         String destination = "/topic/gyroscope";
         sensorDataStream.foreach((s, value) -> {
@@ -66,7 +66,7 @@ public class SensorDataHandler {
     }
 
     @StreamListener(Bindings.LIGHT)
-    public void processLight(KStream<String, AccelerometerRecord> sensorDataStream) {
+    public void processLight(KStream<String, SensorRecord> sensorDataStream) {
 
         String destination = "/topic/light";
         sensorDataStream.foreach((s, value) -> {
@@ -77,7 +77,7 @@ public class SensorDataHandler {
 
     }
 
-    private void convertAndSend(AccelerometerRecord value, String destination) {
+    private void convertAndSend(SensorRecord value, String destination) {
         Float[] values = value.getValues().toArray(new Float[0]);
         Float[] valuesFull = IntStream.range(0, 4).mapToObj(value1 -> {
             if (values.length > value1)
@@ -94,14 +94,14 @@ public class SensorDataHandler {
         messagingTemplate.convertAndSend(destination, dto);
     }
 
-    @StreamListener(Bindings.ACTIVITIES)
-    public void processActivities(KStream<String, CountSumTimeAverage> sensorDataStream) {
+    @StreamListener(Bindings.STATS)
+    public void processActivities(KStream<String, Stats> sensorDataStream) {
 
         // TODO: implement activity recognition logic
 
         sensorDataStream.foreach((s, value) -> {
             log.debug("Retrieved message from input binding '" + Bindings.LINEAR_ACCELERATION +
-                    "', forwarding to output binding '" + Bindings.ACTIVITIES + "'.");
+                    "', forwarding to output binding '" + Bindings.STATS + "'.");
 
             CountSumTimeAverageDto dto = CountSumTimeAverageDto.builder()
                 .count(value.getCount())
