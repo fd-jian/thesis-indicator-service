@@ -1,17 +1,11 @@
 package com.edutec.indicatorservice.handlers;
 
-import java.time.Instant;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.stream.IntStream;
-
-import com.edutec.indicatorservice.bindings.Bindings;
 import com.edutec.activitydetector.countsum.CountSumTimeAverage;
 import com.edutec.activitydetector.model.AccelerometerRecord;
+import com.edutec.indicatorservice.bindings.Bindings;
 import com.edutec.indicatorservice.model.AccelerometerRecordDto;
 import com.edutec.indicatorservice.model.CountSumTimeAverageDto;
-
+import lombok.RequiredArgsConstructor;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,7 +14,7 @@ import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
-import lombok.RequiredArgsConstructor;
+import java.util.stream.IntStream;
 
 @EnableBinding(Bindings.class)
 @Component
@@ -38,7 +32,7 @@ public class SensorDataHandler {
 
         String destination = "/topic/linear-acceleration";
         sensorDataStream.foreach((s, value) -> {
-            log.info("Retrieved message from input binding '" + Bindings.LINEAR_ACCELERATION +
+            log.debug("Retrieved message from input binding '" + Bindings.LINEAR_ACCELERATION +
                     "', forwarding to output binding '" + Bindings.ACTIVITIES + "'.");
             convertAndSend(value, destination);
         });
@@ -52,7 +46,7 @@ public class SensorDataHandler {
 
         String destination = "/topic/accelerometer";
         sensorDataStream.foreach((s, value) -> {
-            log.info("Retrieved message from input binding '" + Bindings.ACCELEROMETER +
+            log.debug("Retrieved message from input binding '" + Bindings.ACCELEROMETER +
                     "', forwarding to destination '" + destination + "'.");
             convertAndSend(value, destination);
         });
@@ -64,7 +58,7 @@ public class SensorDataHandler {
 
         String destination = "/topic/gyroscope";
         sensorDataStream.foreach((s, value) -> {
-            log.info("Retrieved message from input binding '" + Bindings.GYROSCOPE +
+            log.debug("Retrieved message from input binding '" + Bindings.GYROSCOPE +
                     "', forwarding to destination '" + destination + "'.");
             convertAndSend(value, destination);
         });
@@ -76,7 +70,7 @@ public class SensorDataHandler {
 
         String destination = "/topic/light";
         sensorDataStream.foreach((s, value) -> {
-            log.info("Retrieved message from input binding '" + Bindings.LIGHT +
+            log.debug("Retrieved message from input binding '" + Bindings.LIGHT +
                     "', forwarding to destination '" + destination + "'.");
             convertAndSend(value, destination);
         });
@@ -106,7 +100,7 @@ public class SensorDataHandler {
         // TODO: implement activity recognition logic
 
         sensorDataStream.foreach((s, value) -> {
-            log.info("Retrieved message from input binding '" + Bindings.LINEAR_ACCELERATION +
+            log.debug("Retrieved message from input binding '" + Bindings.LINEAR_ACCELERATION +
                     "', forwarding to output binding '" + Bindings.ACTIVITIES + "'.");
 
             CountSumTimeAverageDto dto = CountSumTimeAverageDto.builder()

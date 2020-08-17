@@ -1,5 +1,4 @@
-debug: true
-
+#debug: true
 custom:
   kafka:
     topics:
@@ -9,48 +8,53 @@ custom:
       gyroscope: gyroscope
       light: light
 
-# Native Encoding enables the kafka serialization/deserialization
-spring.cloud.stream.default.producer:
-  useNativeEncoding: true
+spring:
+  security:
+    user:
+      name: ${USERNAME}
+      password: ${PASSWORD}
+      roles: ADMINISTRATOR
+  cloud:
+    stream:
+      bindings:
+        input:
+          contentType: application/*+avro
+          consumer:
+            useNativeDecoding: true
+        output:
+          producer:
+            useNativeEncoding: true
+        # Configure the bindings
+        linear-acceleration:
+          destination: ${custom.kafka.topics.linear-acceleration}
+        accelerometer:
+          destination: ${custom.kafka.topics.accelerometer}
+        gyroscope:
+          destination: ${custom.kafka.topics.gyroscope}
+        light:
+          destination: ${custom.kafka.topics.light}
+        activities:
+          destination: ${custom.kafka.topics.activities}
+      # Native Encoding enables the kafka serialization/deserialization
+      default.producer:
+        useNativeEncoding: true
+      default.consumer:
+        useNativeEncoding: true
 
-spring.cloud.stream.default.consumer:
-  useNativeEncoding: true
+      #TODO: figure out how to handle different types. maybe use connector to stream in format <key: timestamp, value: json>
+      #TODO: ...so that the bindings can be configured for a single serializer/deserializer for all streams.
+      kafka:
+        streams:
+          # Configure the kafka streams binder to consume messages
+          binder:
+            brokers: kafka:29092
+            configuration:
+              # TODO: use native encoding (is it used already?)
+              default.key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+              default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
+              schema.registry.url: http://schema-registry:8081
+              cache.max.bytes.buffering: 0
+          bindings:
+            sensor-data:
+              consumer.application-id: indicator-service
 
-#TODO: figure out how to handle different types. maybe use connector to stream in format <key: timestamp, value: json>
-#TODO:    so that the bindings can be configured for a single serializer/deserializer for all streams.
-
-# Configure the kafka streams binder to consume messages
-spring.cloud.stream.kafka.streams.binder:
-  brokers: kafka:29092
-  configuration:
-# TODO: use native encoding (is it used already?)
-#    default.key.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-    default.key.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
-#    default.key.serde: org.springframework.kafka.support.serializer.JsonSerde
-    default.value.serde: io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
-    schema.registry.url: http://schema-registry:8081
-#    default.value.serde: org.apache.kafka.common.serialization.Serdes$StringSerde
-#    default.value.serde: com.edutec.activitydetector.AccelerometerSerde
-#    default.value.serde: org.springframework.kafka.support.serializer.JsonSerde
-    cache.max.bytes.buffering: 0
-
-spring.cloud.stream.bindings.input.contentType: application/*+avro
-spring.cloud.stream.bindings.input.consumer.useNativeDecoding: true
-spring.cloud.stream.bindings.output.producer.useNativeEncoding: true
-
-# Configure the bindings
-spring.cloud.stream.bindings:
-  linear-acceleration:
-    destination: ${custom.kafka.topics.linear-acceleration}
-  accelerometer:
-    destination: ${custom.kafka.topics.accelerometer}
-  gyroscope:
-    destination: ${custom.kafka.topics.gyroscope}
-  light:
-    destination: ${custom.kafka.topics.light}
-  activities:
-    destination: ${custom.kafka.topics.activities}
-
-spring.cloud.stream.kafka.streams.bindings:
-  sensor-data:
-    consumer.application-id: indicator-service
