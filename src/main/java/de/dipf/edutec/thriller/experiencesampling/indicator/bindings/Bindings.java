@@ -1,8 +1,7 @@
-package com.edutec.indicatorservice.bindings;
+package de.dipf.edutec.thriller.experiencesampling.indicator.bindings;
 
-import com.edutec.activitydetector.countsum.CountSumTimeAverage;
-import com.edutec.activitydetector.model.AccelerometerRecord;
-
+import de.dipf.edutec.thriller.experiencesampling.SensorRecord;
+import de.dipf.edutec.thriller.experiencesampling.Stats;
 import org.apache.kafka.streams.kstream.KStream;
 import org.springframework.cloud.stream.annotation.Input;
 
@@ -12,29 +11,29 @@ public interface Bindings {
     String ACCELEROMETER = "accelerometer";
     String GYROSCOPE = "gyroscope";
     String LIGHT = "light";
-    String ACTIVITIES = "activities";
+    String STATS = "activities";
 
     @Input(LINEAR_ACCELERATION)
     // TODO: use user id key
-    KStream<String, AccelerometerRecord> linearAccelerometer();
+    KStream<String, SensorRecord> linearAcceleration();
 
 
     @Input(ACCELEROMETER)
         // TODO: use user id key
-    KStream<String, AccelerometerRecord> accelerometer();
+    KStream<String, SensorRecord> accelerometer();
 
 
     @Input(GYROSCOPE)
         // TODO: use user id key
-    KStream<String, AccelerometerRecord> gyroscope();
+    KStream<String, SensorRecord> gyroscope();
 
 
     @Input(LIGHT)
         // TODO: use user id key
-    KStream<String, AccelerometerRecord> light();
+    KStream<String, SensorRecord> light();
 
-    @Input(ACTIVITIES)
+    @Input(STATS)
         // TODO: use user id key
-    KStream<String, CountSumTimeAverage> activities();
+    KStream<String, Stats> stats();
 
 }

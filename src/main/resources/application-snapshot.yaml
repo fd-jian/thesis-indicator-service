@@ -2,7 +2,7 @@
 custom:
   kafka:
     topics:
-      activities: activities
+      stats: stats
       linear-acceleration: linear_acceleration
       accelerometer: accelerometer
       gyroscope: gyroscope
@@ -33,8 +33,8 @@ spring:
           destination: ${custom.kafka.topics.gyroscope}
         light:
           destination: ${custom.kafka.topics.light}
-        activities:
-          destination: ${custom.kafka.topics.activities}
+        stats:
+          destination: ${custom.kafka.topics.stats}
       # Native Encoding enables the kafka serialization/deserialization
       default.producer:
         useNativeEncoding: true

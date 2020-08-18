@@ -129,16 +129,12 @@ schemaRegistry {
     } //optional
 
     register {
-//        subject('activities-key', 'src/main/avro')
-        subject('activities-value', 'src/main/avro/values')
-        subject('accelerometer-value', 'src/main/avro/values')
-        //subject('accelerometer-key', 'src/main/avro')
+        subject('stats-value', 'src/main/avro/values/stats-value.avsc')
+        subject('mqtt-sensors-value', 'src/main/avro/values/mqtt-sensors-value.avsc')
     }
 
     download {
-//        subject('activities-key', 'src/main/avro')
-        subject('activities-value', 'src/main/avro/values')
-        subject('accelerometer-value', 'src/main/avro/values')
-        //subject('accelerometer-key', 'src/main/avro')
+        subject('stats-value', 'src/main/avro/values')
+        subject('mqtt-sensors-value', 'src/main/avro/values')
     }
 }

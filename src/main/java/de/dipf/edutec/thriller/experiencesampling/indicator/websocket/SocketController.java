@@ -1,9 +1,5 @@
-package com.edutec.indicatorservice.websocket;
+package de.dipf.edutec.thriller.experiencesampling.indicator.websocket;
 
-import com.edutec.indicatorservice.model.CountSumTimeAverageDto;
-
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
 @Controller
