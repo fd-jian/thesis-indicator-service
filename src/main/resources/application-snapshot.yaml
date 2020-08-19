@@ -45,8 +45,6 @@ spring:
       default.consumer:
         useNativeEncoding: true
 
-      #TODO: figure out how to handle different types. maybe use connector to stream in format <key: timestamp, value: json>
-      #TODO: ...so that the bindings can be configured for a single serializer/deserializer for all streams.
       kafka:
         streams:
           # Configure the kafka streams binder to consume messages
