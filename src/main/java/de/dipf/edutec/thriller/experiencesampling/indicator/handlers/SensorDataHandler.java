@@ -4,6 +4,7 @@ import de.dipf.edutec.thriller.experiencesampling.SensorRecord;
 import de.dipf.edutec.thriller.experiencesampling.Stats;
 import de.dipf.edutec.thriller.experiencesampling.UserIds;
 import de.dipf.edutec.thriller.experiencesampling.indicator.bindings.Bindings;
+import de.dipf.edutec.thriller.experiencesampling.indicator.controller.UserIdsDto;
 import de.dipf.edutec.thriller.experiencesampling.indicator.model.AccelerometerRecordDto;
 import de.dipf.edutec.thriller.experiencesampling.indicator.model.CountSumTimeAverageDto;
 import io.confluent.kafka.streams.serdes.avro.PrimitiveAvroSerde;
@@ -34,6 +35,7 @@ public class SensorDataHandler {
     public static final String DESTINATION_GYROSCOPE = "/topic/gyroscope";
     public static final String DESTINATION_LIGHT = "/topic/light";
     public static final String DESTINATION_STATS = "/topic/stats";
+    public static final String DESTINATION_USER_IDS = "/topic/user-ids";
 
 
 
@@ -149,7 +151,13 @@ public class SensorDataHandler {
         sensorDataStream
                 .groupByKey()
                 .reduce((value1, value2) -> value2, Materialized.as("indicator-user-ids"))
-                .toStream();
+                .toStream()
+                .foreach((key, value) -> {
+                    log.debug("Retrieved message from input binding '" + Bindings.USER_IDS_IN +
+                            "', forwarding to destination '" + DESTINATION_USER_IDS + "'.");
+                    messagingTemplate.convertAndSend(DESTINATION_USER_IDS,
+                            new UserIdsDto(value.getIds(), value.getTime()));
+                });
     }
 
     private String deserialize(String s) {
