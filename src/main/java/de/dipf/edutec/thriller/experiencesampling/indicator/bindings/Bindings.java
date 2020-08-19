@@ -11,7 +11,7 @@ public interface Bindings {
     String ACCELEROMETER = "accelerometer";
     String GYROSCOPE = "gyroscope";
     String LIGHT = "light";
-    String STATS = "activities";
+    String STATS = "stats";
     String USER_IDS_IN = "user-ids-in";
 
     @Input(LINEAR_ACCELERATION)

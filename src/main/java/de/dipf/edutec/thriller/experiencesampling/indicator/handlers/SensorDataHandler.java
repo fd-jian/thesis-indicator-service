@@ -37,8 +37,6 @@ public class SensorDataHandler {
     public static final String DESTINATION_STATS = "/topic/stats";
     public static final String DESTINATION_USER_IDS = "/topic/user-ids";
 
-
-
     private final Map<String, String> avroSerdeConfig;
     private final PrimitiveAvroSerde<String> stringKeyPrimitiveSerde;
     private String userIdsInDestination;
@@ -107,25 +105,8 @@ public class SensorDataHandler {
         });
     }
 
-    private void convertAndSend(SensorRecord value, String destination) {
-        Float[] values = value.getValues().toArray(new Float[0]);
-        Float[] valuesFull = IntStream.range(0, 4).mapToObj(value1 -> {
-            if (values.length > value1)
-                return values[value1];
-            else return 0F;
-        }).toArray(Float[]::new);
-        AccelerometerRecordDto dto = AccelerometerRecordDto.builder()
-                .time(value.getTime())
-                .x(valuesFull[0])
-                .y(valuesFull[1])
-                .z(valuesFull[2])
-                .build();
-
-        messagingTemplate.convertAndSend(destination, dto);
-    }
-
     @StreamListener(Bindings.STATS)
-    public void processActivities(KStream<String, Stats> sensorDataStream) {
+    public void processStats(KStream<String, Stats> sensorDataStream) {
 
         // TODO: implement activity recognition logic
 
@@ -158,6 +139,23 @@ public class SensorDataHandler {
                     messagingTemplate.convertAndSend(DESTINATION_USER_IDS,
                             new UserIdsDto(value.getIds(), value.getTime()));
                 });
+    }
+
+    private void convertAndSend(SensorRecord value, String destination) {
+        Float[] values = value.getValues().toArray(new Float[0]);
+        Float[] valuesFull = IntStream.range(0, 4).mapToObj(value1 -> {
+            if (values.length > value1)
+                return values[value1];
+            else return 0F;
+        }).toArray(Float[]::new);
+        AccelerometerRecordDto dto = AccelerometerRecordDto.builder()
+                .time(value.getTime())
+                .x(valuesFull[0])
+                .y(valuesFull[1])
+                .z(valuesFull[2])
+                .build();
+
+        messagingTemplate.convertAndSend(destination, dto);
     }
 
     private String deserialize(String s) {
