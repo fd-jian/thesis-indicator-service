@@ -1,19 +1,27 @@
 package de.dipf.edutec.thriller.experiencesampling.indicator.handlers;
 
+import de.dipf.edutec.thriller.experiencesampling.UserIds;
 import de.dipf.edutec.thriller.experiencesampling.indicator.bindings.Bindings;
 import de.dipf.edutec.thriller.experiencesampling.indicator.model.AccelerometerRecordDto;
 import de.dipf.edutec.thriller.experiencesampling.indicator.model.CountSumTimeAverageDto;
 import de.dipf.edutec.thriller.experiencesampling.SensorRecord;
 import de.dipf.edutec.thriller.experiencesampling.Stats;
+import io.confluent.kafka.streams.serdes.avro.PrimitiveAvroSerde;
+import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import lombok.RequiredArgsConstructor;
+import org.apache.kafka.streams.KeyValue;
+import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.cloud.stream.annotation.EnableBinding;
 import org.springframework.cloud.stream.annotation.StreamListener;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.*;
 import java.util.stream.IntStream;
 
 @EnableBinding(Bindings.class)
@@ -116,4 +124,12 @@ public class SensorDataHandler {
 
     }
 
+    @StreamListener(Bindings.USER_IDS_IN)
+    public void userIds(KStream<Long, UserIds> sensorDataStream) {
+
+        sensorDataStream
+                .groupByKey()
+                .reduce((value1, value2) -> value2, Materialized.as("indicator-user-ids"))
+                .toStream();
+    }
 }

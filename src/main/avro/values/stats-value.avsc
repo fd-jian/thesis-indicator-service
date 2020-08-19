@@ -7,27 +7,15 @@
     "type" : "long"
   }, {
     "name" : "time",
-    "type" : {
-      "type" : "string",
-      "avro.java.string" : "String"
-    }
+    "type" : "string"
   }, {
     "name" : "timeSumSec",
-    "type" : {
-      "type" : "string",
-      "avro.java.string" : "String"
-    }
+    "type" : "string"
   }, {
     "name" : "countPerSecond",
-    "type" : {
-      "type" : "string",
-      "avro.java.string" : "String"
-    }
+    "type" : "string"
   }, {
     "name" : "sessionId",
-    "type" : {
-      "type" : "string",
-      "avro.java.string" : "String"
-    }
+    "type" : "string"
   } ]
 }

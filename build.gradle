@@ -131,10 +131,12 @@ schemaRegistry {
     register {
         subject('stats-value', 'src/main/avro/values/stats-value.avsc')
         subject('mqtt-sensors-value', 'src/main/avro/values/mqtt-sensors-value.avsc')
+        subject('user-ids-value', 'src/main/avro/values/user-ids-value.avsc')
     }
 
     download {
         subject('stats-value', 'src/main/avro/values')
         subject('mqtt-sensors-value', 'src/main/avro/values')
+        subject('user-ids-value', 'src/main/avro/values')
     }
 }

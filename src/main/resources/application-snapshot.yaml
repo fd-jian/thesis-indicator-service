@@ -7,6 +7,7 @@ custom:
       accelerometer: accelerometer
       gyroscope: gyroscope
       light: light
+      user-ids: user-ids
 
 spring:
   security:
@@ -35,6 +36,9 @@ spring:
           destination: ${custom.kafka.topics.light}
         stats:
           destination: ${custom.kafka.topics.stats}
+        user-ids-in:
+          destination: ${custom.kafka.topics.user-ids}
+
       # Native Encoding enables the kafka serialization/deserialization
       default.producer:
         useNativeEncoding: true
@@ -55,6 +59,23 @@ spring:
               schema.registry.url: http://schema-registry:8081
               cache.max.bytes.buffering: 0
           bindings:
-            sensor-data:
-              consumer.application-id: indicator-service
+            linear-acceleration:
+              consumer:
+                application-id: indicator-linear-acceleration
+            accelerometer:
+              consumer:
+                application-id: indicator-accelerometer
+            gyroscope:
+              consumer:
+                application-id: indicator-gyroscope
+            light:
+              consumer:
+                application-id: indicator-light
+            stats:
+              consumer:
+                application-id: indicator-stats
+            user-ids-in:
+              consumer:
+                keySerde: io.confluent.kafka.streams.serdes.avro.PrimitiveAvroSerde
+                application-id: indicator-user-ids-in
 

@@ -12,28 +12,26 @@ public interface Bindings {
     String GYROSCOPE = "gyroscope";
     String LIGHT = "light";
     String STATS = "activities";
+    String USER_IDS_IN = "user-ids-in";
 
     @Input(LINEAR_ACCELERATION)
-    // TODO: use user id key
     KStream<String, SensorRecord> linearAcceleration();
 
 
     @Input(ACCELEROMETER)
-        // TODO: use user id key
     KStream<String, SensorRecord> accelerometer();
 
 
     @Input(GYROSCOPE)
-        // TODO: use user id key
     KStream<String, SensorRecord> gyroscope();
 
 
     @Input(LIGHT)
-        // TODO: use user id key
     KStream<String, SensorRecord> light();
 
     @Input(STATS)
-        // TODO: use user id key
     KStream<String, Stats> stats();
 
+    @Input(USER_IDS_IN)
+    KStream<String, SensorRecord> userIdsIn();
 }
